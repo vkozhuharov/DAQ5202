@@ -5,8 +5,8 @@
 #ifndef _DT5202_H_
 #define _DT5202_H_
 
-
-
+#include <cstdint>
+#include <cstddef>
 
 #define COMMAND_PORT		"9760"  // Slow Control Port (access to Registers)
 #define STREAMING_PORT		"9000"	// Data RX Port (streaming)
@@ -24,11 +24,11 @@ typedef int							f_socket_t;			//!< Return type of socket(). On Linux socket() 
 
 class DT5202 {
  public:
-  DT5202(){handle=0};
+  DT5202();
   void Init(){;};
-
-  
-
+  int Init(const char*, const char*);
+  void Run(){;};
+  void Close(){;};
 
  private:
   void *ptr;
