@@ -35,7 +35,7 @@ int DT5202::Init(const char* addr,const char *cfg){
   res = LLeth_ReadRegister(a_channel_mask_0, &data);
   printf("\tChannel mask: %x \n",data);
 
-  
+   
   return 0;
 }
 
@@ -47,16 +47,6 @@ f_socket_t DT5202::LLeth_ConnectToSocket(const char *board_ip_addr, char *port)
 	unsigned long ul = 1;
 	int iResult, connect_fail = 0;
 
-#ifdef _WIN32
-	// Initialize Winsock
-	WSADATA wsaData;
-	iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
-	if (iResult != 0) {
-		if (ENABLE_FERSLIB_LOGMSG) FERS_LibMsg("WSAStartup failed with error: %d\n", iResult);
-		return 1;
-	}
-#endif
-
 	memset(&hints, 0, sizeof(hints));
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
@@ -66,9 +56,7 @@ f_socket_t DT5202::LLeth_ConnectToSocket(const char *board_ip_addr, char *port)
 	iResult = getaddrinfo(board_ip_addr, port, &hints, &result);
 	if (iResult != 0) {
 		if (ENABLE_FERSLIB_LOGMSG) FERS_LibMsg("LCSm", "getaddrinfo failed with error: %d\n", iResult);
-#ifdef _WIN32
-		WSACleanup();
-#endif
+
 		return f_socket_invalid;
 	}
 
@@ -79,9 +67,8 @@ f_socket_t DT5202::LLeth_ConnectToSocket(const char *board_ip_addr, char *port)
 		ConnectSocket = socket(ptr->ai_family, ptr->ai_socktype, ptr->ai_protocol);
 		if (ConnectSocket == f_socket_invalid) {
 			if (ENABLE_FERSLIB_LOGMSG) FERS_LibMsg("socket failed with error: %ld\n", f_socket_errno); // WSAGetLastError());
-#ifdef _WIN32
-			WSACleanup();
-#endif
+
+
 			return f_socket_invalid;
 		}
 
@@ -93,11 +80,8 @@ f_socket_t DT5202::LLeth_ConnectToSocket(const char *board_ip_addr, char *port)
 			ConnectSocket = INVALID_SOCKET;
 			continue;
 		}*/
-#ifdef _WIN32
-		ioctlsocket(ConnectSocket, FIONBIO, &ul); //set as non-blocking
-#else
 		ioctl(ConnectSocket, FIONBIO, &ul);
-#endif
+
 		if (connect(ConnectSocket, ptr->ai_addr, (int)ptr->ai_addrlen) == -1) {
 			fd_set set;
 			int error = -1;
@@ -134,9 +118,8 @@ f_socket_t DT5202::LLeth_ConnectToSocket(const char *board_ip_addr, char *port)
 
 	if (ConnectSocket == f_socket_invalid) {
 		if (ENABLE_FERSLIB_LOGMSG) FERS_LibMsg("Unable to connect to server!\n");
-#ifdef _WIN32
-		WSACleanup();
-#endif
+
+
 		return f_socket_invalid;
 	} else return ConnectSocket;
 }
@@ -169,9 +152,7 @@ int DT5202::LLeth_WriteReg_i2c( uint32_t address, uint32_t data)
 	iResult = recv(sck, sendbuf, 4, 0);
 	if (iResult == f_socket_error) {
 		if (ENABLE_FERSLIB_LOGMSG) FERS_LibMsg("WriteReg_i2c, recv failed with error: %d\n", f_socket_errno); 
-#ifdef _WIN32
-		WSACleanup();
-#endif
+
 		return -1;
 	}
 	res = *((uint32_t *)sendbuf);

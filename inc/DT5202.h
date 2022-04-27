@@ -70,6 +70,10 @@ class DT5202 {
   
   int LLeth_ReadData(char *buff, int size, int *nb);
 
+
+
+  
+
  private:
   void *ptr;
   int handle;
