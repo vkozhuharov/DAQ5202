@@ -1,18 +1,18 @@
 /******************************************************************************
-* 
-* CAEN SpA - Front End Division
-* Via Vetraia, 11 - 55049 - Viareggio ITALY
-* +390594388398 - www.caen.it
-*
-***************************************************************************//**
-* \note TERMS OF USE:
-* This program is free software; you can redistribute it and/or modify it under
-* the terms of the GNU General Public License as published by the Free Software
-* Foundation. This program is distributed in the hope that it will be useful, 
-* but WITHOUT ANY WARRANTY; without even the implied warranty of 
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. The user relies on the 
-* software, documentation and results solely at his own risk.
-******************************************************************************/
+ * 
+ * CAEN SpA - Front End Division
+ * Via Vetraia, 11 - 55049 - Viareggio ITALY
+ * +390594388398 - www.caen.it
+ *
+ ***************************************************************************//**
+									      * \note TERMS OF USE:
+									      * This program is free software; you can redistribute it and/or modify it under
+									      * the terms of the GNU General Public License as published by the Free Software
+									      * Foundation. This program is distributed in the hope that it will be useful, 
+									      * but WITHOUT ANY WARRANTY; without even the implied warranty of 
+									      * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. The user relies on the 
+									      * software, documentation and results solely at his own risk.
+									      ******************************************************************************/
 
 #ifndef _FERSLIB_H
 #define _FERSLIB_H				// Protect against multiple inclusion
@@ -92,67 +92,77 @@
 //******************************************************************
 // Board Info Struct
 //******************************************************************
-typedef struct {
-	uint32_t pid;			// Board PID (5 decimal digits)
-	uint16_t FERSCode;	// e.g. 5202
-	uint8_t PCBrevision;	// PCB revision 
-	char ModelCode[16];		// e.g. WA5202XAAAAA
-	char ModelName[16];		// e.g. A5202
-	uint8_t FormFactor;		// 0=naked version (A52XX), 1=boxed version (DT52XX)
-	uint16_t NumCh;			// Number of channels
-	uint32_t FPGA_FWrev;	// FPGA FW revision 
-	uint32_t uC_FWrev;		// uC FW revision
+typedef struct
+{
+  uint32_t pid;		    // Board PID (5 decimal digits)
+  uint16_t FERSCode;	    // e.g. 5202
+  uint8_t PCBrevision;      // PCB revision 
+  char ModelCode[16];	    // e.g. WA5202XAAAAA
+  char ModelName[16];	    // e.g. A5202
+  uint8_t FormFactor;	    // 0=naked version (A52XX), 1=boxed version (DT52XX)
+  uint16_t NumCh;	    // Number of channels
+  uint32_t FPGA_FWrev;	    // FPGA FW revision 
+  uint32_t uC_FWrev;        // uC FW revision
 } FERS_BoardInfo_t;
+
+typedef struct
+{
+  uint32_t pid;		    // Board PID (5 decimal digits)
+  char model[16];	    // e.g. DT5202
+  uint16_t ch_count;	    // Number of channels
+  uint32_t fw_rev;	    // FW revision
+} DT5202_BoardInfo_t;
 
 //******************************************************************
 // Event Data Structures
 //******************************************************************
 // Spectroscopy Event (with or without timing)
-typedef struct {
-	double tstamp_us;
-	uint64_t trigger_id;
-	uint64_t chmask;
-	uint64_t qdmask;
-	uint16_t energyHG[64];
-	uint16_t energyLG[64];
-	uint32_t tstamp[64];	// used in TSPEC mode only
-	uint16_t ToT[64];		// used in TSPEC mode only
+typedef struct
+{
+  double tstamp_us;
+  uint64_t trigger_id;
+  uint64_t chmask;
+  uint64_t qdmask;
+  uint16_t energyHG[64];
+  uint16_t energyLG[64];
+  uint32_t tstamp[64];	      // used in TSPEC mode only
+  uint16_t ToT[64];	      // used in TSPEC mode only
 } SpectEvent_t;
 
 // Counting Event
 typedef struct {
-	double tstamp_us;
-	uint64_t trigger_id;
-	uint64_t chmask;
-	uint32_t counts[64];
-	uint32_t t_or_counts;
-	uint32_t q_or_counts;
+  double tstamp_us;
+  uint64_t trigger_id;
+  uint64_t chmask;
+  uint32_t counts[64];
+  uint32_t t_or_counts;
+  uint32_t q_or_counts;
 } CountingEvent_t;
 
 // Waveform Event
 typedef struct {
-	double tstamp_us;
-	uint64_t trigger_id;
-	uint16_t ns;
-	uint16_t *wave_hg;
-	uint16_t *wave_lg;
-	uint8_t *dig_probes;
+  double tstamp_us;
+  uint64_t trigger_id;
+  uint16_t ns;
+  uint16_t *wave_hg;
+  uint16_t *wave_lg;
+  uint8_t *dig_probes;
 } WaveEvent_t;
 
 // List Event (timing mode only)
 typedef struct {
-	uint16_t nhits;
-	uint8_t  channel[MAX_LIST_SIZE];
-	uint32_t tstamp[MAX_LIST_SIZE];
-	uint16_t ToT[MAX_LIST_SIZE];
+  uint16_t nhits;
+  uint8_t  channel[MAX_LIST_SIZE];
+  uint32_t tstamp[MAX_LIST_SIZE];
+  uint16_t ToT[MAX_LIST_SIZE];
 } ListEvent_t;
 
 // Test Mode Event (fixed data patterns)
 typedef struct {
-	double tstamp_us;
-	uint64_t trigger_id;
-	uint16_t nwords;
-	uint32_t test_data[MAX_TEST_NWORDS];
+  double tstamp_us;
+  uint64_t trigger_id;
+  uint16_t nwords;
+  uint32_t test_data[MAX_TEST_NWORDS];
 } TestEvent_t;
 
 

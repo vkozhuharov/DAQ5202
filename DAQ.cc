@@ -15,7 +15,8 @@
 #include "DT5202.h"
 
 
-void termination_handler (int signum) {
+void termination_handler (int signum)
+{
   //Send Acquisition stop signal
 
 
@@ -30,12 +31,11 @@ void termination_handler (int signum) {
 
   printf("Digitizer closed \n");
   exit(0);
-
 }
 
 
-int main(int argc, char **argv){
-
+int main(int argc, char **argv)
+{
   //Signal processing
   signal (SIGINT, termination_handler);  printf("Trap signals: %d, ",SIGINT);
   signal (SIGHUP, termination_handler);  printf("%d, ",SIGHUP);
@@ -46,10 +46,12 @@ int main(int argc, char **argv){
   
   DT5202 *board = new DT5202();
   
-  board->Init("192.168.2.240","");
-  //  board->
-  
+  board->Init("192.168.2.240");
+  //board->
+  //pid = board->LLeth_ReadRegister("192.168.2.240", a_pid);
+  //printf("%d, ", pid);
+  //board->
 
-  
+  printf("\nClosing connection...\n");
   board->Close();
 }

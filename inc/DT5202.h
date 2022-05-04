@@ -31,22 +31,24 @@
 
 
 //Ethernet defines
-typedef int							f_socket_t;			//!< Return type of socket(). On Linux socket() returns int.
+typedef int				       	f_socket_t;			//!< Return type of socket(). On Linux socket() returns int.
 #define f_socket_errno				errno				//!< On Linux socket-related functions set the error into errno variable.
 #define f_socket_h_errno			h_errno				//!< On Linux network database operations like gethostbyname() set the error into h_errno variable.
 #define f_socket_invalid			(-1)				//!< On Windows functions like accept() return INVALID_SOCKET in case of error. On Linux they return -1.
 #define f_socket_error				(-1)				//!< On Windows functions like send() return SOCKET_ERROR in case of error. On Linux they return -1.
-#define f_socket_close(f_sock)		close(f_sock)		//!< On Windows closesocket. On linux close>
-
-
+#define f_socket_close(f_sock)	        	close(f_sock)	        	//!< On Windows closesocket. On linux close>
 
 
 class DT5202 {
- public:
+public:
   DT5202();
   void Init(){;};
+  int Init(const char*);
   int Init(const char*, const char*);
-  void Run(){;};
+  void Fill_BoardInfo(const char* addr);
+  void Get_BoardState(const char* addr);
+  void Run_Start(uint32_t comm, uint32_t set_acq);
+  void Run_Stop(uint32_t comm, uint32_t set_acq);
   void Close();
 
   int LLeth_OpenDevice(const char *board_ip_addr);
@@ -70,22 +72,19 @@ class DT5202 {
   
   int LLeth_ReadData(char *buff, int size, int *nb);
 
-
-
+  int LLtdl_SendCommand(int cindex, int chain, int node, uint32_t cmd, uint32_t delay);
   
-
- private:
+private:
   void *ptr;
   int handle;
   f_socket_t CtrlSocket;
   f_socket_t DataSocket;
-  FERS_BoardInfo_t BoardInfo;
+  //FERS_BoardInfo_t BoardInfo;
+  DT5202_BoardInfo_t BoardInfo;
   char *ethRxBuff;
   uint32_t ethBuff_wp;
   uint32_t ethBuff_rp;
-  
 };
-
 
 
 #endif
